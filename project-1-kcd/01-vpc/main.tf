@@ -71,3 +71,98 @@ resource "google_compute_subnetwork" "default" {
     ip_cidr_range = local.named-range["default/services"]
   }
 }
+
+
+
+# firewall
+
+module "common_firewall" {
+  source = "../../modules/gcp-common-firewall-v2"
+  providers = {
+    google = google
+  }
+
+  network = google_compute_network.default
+}
+
+## block private ip by default
+resource "google_compute_firewall" "block-private-ip" {
+  name    = "${google_compute_network.default.name}-block-private-ip"
+  network = google_compute_network.default.id
+
+  direction = "EGRESS"
+
+  destination_ranges = [
+    # rfc 1918
+    "10.0.0.0/8",
+    "172.16.0.0/12",
+    "192.168.0.0/16",
+
+    # rfc 6598
+    "100.64.0.0/10",
+  ]
+
+  deny {
+    protocol = "all"
+  }
+
+  priority = 9000
+
+  log_config {
+    metadata = "INCLUDE_ALL_METADATA"
+  }
+}
+
+locals {
+  firewall-spec = yamldecode(file("./firewall.yaml"))
+  resolved-range = merge(flatten([
+    [for _, fw in local.firewall-spec : [
+      [for range in fw.from : { "${range}" = range } if can(cidrnetmask(range))],
+      [for range in fw.to : { "${range}" = range } if can(cidrnetmask(range))],
+    ]],
+    [for name, cidr in local.named-range : { "${name}" = cidr }],
+  ])...)
+  translated-firewall = merge(flatten([
+    {
+      for name, rule in local.firewall-spec :
+      name => {
+        from = sort([for v in rule.from : local.resolved-range[v]]),
+        to   = sort([for v in rule.to : local.resolved-range[v]]),
+      }
+    },
+    {
+      "temporary-debug" : {
+        from = ["10.233.17.2/32"]
+        to   = ["0.0.0.0/0"]
+      }
+    }
+  ])...)
+}
+
+resource "google_compute_firewall" "ingress" {
+  for_each = local.translated-firewall
+
+  name      = "${google_compute_network.default.name}-i-${each.key}"
+  network   = google_compute_network.default.id
+  direction = "INGRESS"
+
+  source_ranges      = each.value.from
+  destination_ranges = each.value.to
+  allow {
+    protocol = "all"
+  }
+}
+
+resource "google_compute_firewall" "egress" {
+  for_each = local.translated-firewall
+
+  name      = "${google_compute_network.default.name}-e-${each.key}"
+  network   = google_compute_network.default.id
+  direction = "EGRESS"
+
+  source_ranges      = each.value.from
+  destination_ranges = each.value.to
+  allow {
+    protocol = "all"
+  }
+}

@@ -1,0 +1,9 @@
+prome-primary:
+  from:
+  - default
+  - default/pods
+  - 10.233.36.144/28   # gke vpc peering
+  to:
+  - default
+  - default/pods
+  - 10.233.36.144/28   # gke vpc peering
