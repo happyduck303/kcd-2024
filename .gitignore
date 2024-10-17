@@ -1,0 +1,11 @@
+## Terraform-specific ignore patterns
+.terraform/
+*.tfstate
+*.tfstate.backup
+terraform.tfvars
+
+## Local development files
+*.tfplan
+*.terraformrc
+terraform.rc
+
