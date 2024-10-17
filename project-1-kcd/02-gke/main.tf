@@ -77,8 +77,8 @@ resource "google_container_cluster" "cluster" {
   master_authorized_networks_config {
     gcp_public_cidrs_access_enabled = false
     cidr_blocks {
-      display_name = "tailscale-automation"
-      cidr_block   = "10.234.0.23/32"
+      display_name = "temporary-debug"
+      cidr_block   = "10.233.17.2/32"
     }
   }
 
@@ -151,6 +151,7 @@ resource "google_container_cluster" "cluster" {
   initial_node_count       = 1
   remove_default_node_pool = true
   node_config {
+    disk_size_gb = "10"
     shielded_instance_config {
       enable_secure_boot          = true
       enable_integrity_monitoring = true
