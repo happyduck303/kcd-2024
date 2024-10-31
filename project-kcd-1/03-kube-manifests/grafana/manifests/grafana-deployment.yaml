@@ -1,0 +1,103 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: grafana
+  name: grafana
+spec:
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      securityContext:
+        fsGroup: 472
+        supplementalGroups:
+          - 0
+      containers:
+        - name: grafana
+          image: grafana/grafana:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+              name: http-grafana
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /robots.txt
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 2
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 3000
+            timeoutSeconds: 1
+          resources:
+            requests:
+              cpu: 250m
+              memory: 750Mi
+          volumeMounts:
+            - mountPath: /var/lib/grafana
+              name: grafana-pv
+            # - mountPath: /etc/grafana
+            #   name: grafana-config
+          env:
+            # - name: GF_PATHS_CONFIG
+            #   value: "/etc/grafana/grafana.ini"
+            # - name: GF_PATHS_DATA
+            #   value: "/var/lib/grafana"
+            # - name: GF_PATHS_HOME
+            #   value: "/usr/share/grafana"
+            # - name: GF_PATHS_LOGS
+            #   value: "/var/log/grafana"
+            # - name: GF_PATHS_PLUGINS
+            #   value: "/var/lib/grafana/plugins"
+            # - name: GF_PATHS_PROVISIONING
+            #   value: "/etc/grafana/provisioning"
+            # - name: GF_SERVER_ROOT_URL
+            #   value: "https://gtp-grafana-staging.gtp-lkpp.teleport.sh"
+            # - name: GF_AUTH_DISABLE_LOGIN_FORM
+            #   value: "true"
+            # - name: GF_AUTH_BASIC_ENABLED
+            #   value: "true"
+            # - name: GF_AUTH_JWT_ENABLED
+            #   value: "true"
+            # - name: GF_AUTH_JWT_DISABLE_LOGIN_FORM
+            #   value: "true"
+            # - name: GF_AUTH_JWT_HEADER_NAME
+            #   value: "Teleport-Jwt-Assertion"
+            # - name: GF_AUTH_JWT_EMAIL_CLAIM
+            #   value: "sub"
+            # - name: GF_AUTH_JWT_USERNAME_CLAIM
+            #   value: "sub"
+            # - name: GF_AUTH_JWT_JWK_SET_URL
+            #   value: "https://gtp-lkpp.teleport.sh/.well-known/jwks.json"
+            # - name: GF_AUTH_JWT_AUTO_SIGN_UP
+            #   value: "true"
+            # # - name: GF_USERS_AUTO_ASSIGN_ORG_ROLE
+            # #   value: "Viewer"
+            # - name: GF_USERS_AUTO_ASSIGN_ORG_ID
+            #   value: "2"
+            # - name: GF_AUTH_JWT_ROLE_ATTRIBUTE_PATH
+            #   value: "contains(roles[*], 'grafana-admin') && 'Admin' || contains(roles[*], 'ekatalog-dev-log-viewer') && 'Viewer' || contains(roles[*], 'toko-daring-dev-log-viewer') && 'Viewer'"
+            # - name: GF_AUTH_JWT_GROUPS_ATTRIBUTE_PATH
+            #   value: roles[*]
+      volumes:
+        - name: grafana-pv
+          persistentVolumeClaim:
+            claimName: grafana-pvc
+        # - name: grafana-config
+        #   configMap:
+        #     name: grafana-config

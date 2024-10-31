@@ -36,3 +36,19 @@ resource "google_project_service" "enabled_service" {
   service            = each.value
   disable_on_destroy = false
 }
+
+# ILB for prome-helm
+resource "google_compute_address" "prome-helm" {
+  project      = google_project.project.name
+  name         = "prome-helm"
+  address_type = "INTERNAL"
+  subnetwork   = "default"
+  region       = "asia-southeast2"
+}
+
+# vpc peering dari project-kcd-2 (default) ke project-kcd-1 (default)
+resource "google_compute_network_peering" "peering-to-project-kcd-1" {
+  name         = "peering-to-project-kcd-1"
+  network      = "https://www.googleapis.com/compute/v1/projects/project-kcd-2/global/networks/default"
+  peer_network = "https://www.googleapis.com/compute/v1/projects/project-kcd-1/global/networks/default"
+}

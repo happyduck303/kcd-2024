@@ -167,37 +167,37 @@ resource "google_container_cluster" "cluster" {
   }
 }
 
-# locals {
-#   pools = [
-#     "e2-standard-4",
-#   ]
-# }
+locals {
+  pools = [
+    "e2-standard-4",
+  ]
+}
 
-# resource "google_container_node_pool" "pool" {
-#   for_each = {
-#     for p in local.pools : "${p}" => { machine_type = p }
-#   }
+resource "google_container_node_pool" "pool" {
+  for_each = {
+    for p in local.pools : "${p}" => { machine_type = p }
+  }
 
-#   name     = each.key
-#   cluster  = google_container_cluster.cluster.name
-#   location = google_container_cluster.cluster.location
+  name     = each.key
+  cluster  = google_container_cluster.cluster.name
+  location = google_container_cluster.cluster.location
 
-#   autoscaling {
-#     total_min_node_count = 0
-#     total_max_node_count = 25
-#   }
+  autoscaling {
+    total_min_node_count = 0
+    total_max_node_count = 25
+  }
 
-#   node_config {
-#     machine_type    = each.value.machine_type
-#     service_account = google_service_account.gke-prome-secondary.email
-#     oauth_scopes    = ["https://www.googleapis.com/auth/cloud-platform"]
-#     disk_type       = "pd-standard"
-#     gvnic {
-#       enabled = true
-#     }
-#     shielded_instance_config {
-#       enable_secure_boot          = true
-#       enable_integrity_monitoring = true
-#     }
-#   }
-# }
+  node_config {
+    machine_type    = each.value.machine_type
+    service_account = google_service_account.gke-prome-secondary.email
+    oauth_scopes    = ["https://www.googleapis.com/auth/cloud-platform"]
+    disk_type       = "pd-standard"
+    gvnic {
+      enabled = true
+    }
+    shielded_instance_config {
+      enable_secure_boot          = true
+      enable_integrity_monitoring = true
+    }
+  }
+}
