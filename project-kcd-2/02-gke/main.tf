@@ -13,13 +13,13 @@ terraform {
   }
 
   backend "gcs" {
-    bucket = "kcd-tfstate"
-    prefix = "project-2-kcd-gke-prome-secondary"
+    bucket = "kcd-2024"
+    prefix = "project-kcd-2/gke/prome-secondary"
   }
 }
 
 locals {
-  project = "project-2-kcd"
+  project = "project-kcd-2"
   region  = "asia-southeast2"
 }
 
@@ -53,6 +53,7 @@ resource "google_project_service" "container" {
 
 resource "google_container_cluster" "cluster" {
   depends_on = [google_project_service.container]
+  deletion_protection = false
 
   name = "prome-secondary"
 
@@ -66,21 +67,21 @@ resource "google_container_cluster" "cluster" {
     cluster_secondary_range_name  = "pods"
     services_secondary_range_name = "services"
   }
-  private_cluster_config {
-    enable_private_endpoint = true
-    enable_private_nodes    = true
-    master_ipv4_cidr_block  = "10.233.36.160/28"
-  }
+  # private_cluster_config {
+  #   enable_private_endpoint = true
+  #   enable_private_nodes    = true
+  #   master_ipv4_cidr_block  = "10.233.36.160/28"
+  # }
   default_snat_status {
     disabled = true
   }
-  master_authorized_networks_config {
-    gcp_public_cidrs_access_enabled = false
-    cidr_blocks {
-      display_name = "temporary-debug"
-      cidr_block   = "10.233.18.2/32"
-    }
-  }
+  # master_authorized_networks_config {
+  #   gcp_public_cidrs_access_enabled = false
+  #   cidr_blocks {
+  #     display_name = "temporary-debug"
+  #     cidr_block   = "10.233.18.2/32"
+  #   }
+  # }
 
 
   # gke feature
@@ -166,37 +167,37 @@ resource "google_container_cluster" "cluster" {
   }
 }
 
-locals {
-  pools = [
-    "e2-standard-4",
-  ]
-}
+# locals {
+#   pools = [
+#     "e2-standard-4",
+#   ]
+# }
 
-resource "google_container_node_pool" "pool" {
-  for_each = {
-    for p in local.pools : "${p}" => { machine_type = p }
-  }
+# resource "google_container_node_pool" "pool" {
+#   for_each = {
+#     for p in local.pools : "${p}" => { machine_type = p }
+#   }
 
-  name     = each.key
-  cluster  = google_container_cluster.cluster.name
-  location = google_container_cluster.cluster.location
+#   name     = each.key
+#   cluster  = google_container_cluster.cluster.name
+#   location = google_container_cluster.cluster.location
 
-  autoscaling {
-    total_min_node_count = 0
-    total_max_node_count = 25
-  }
+#   autoscaling {
+#     total_min_node_count = 0
+#     total_max_node_count = 25
+#   }
 
-  node_config {
-    machine_type    = each.value.machine_type
-    service_account = google_service_account.gke-prome-secondary.email
-    oauth_scopes    = ["https://www.googleapis.com/auth/cloud-platform"]
-    disk_type       = "pd-standard"
-    gvnic {
-      enabled = true
-    }
-    shielded_instance_config {
-      enable_secure_boot          = true
-      enable_integrity_monitoring = true
-    }
-  }
-}
+#   node_config {
+#     machine_type    = each.value.machine_type
+#     service_account = google_service_account.gke-prome-secondary.email
+#     oauth_scopes    = ["https://www.googleapis.com/auth/cloud-platform"]
+#     disk_type       = "pd-standard"
+#     gvnic {
+#       enabled = true
+#     }
+#     shielded_instance_config {
+#       enable_secure_boot          = true
+#       enable_integrity_monitoring = true
+#     }
+#   }
+# }
