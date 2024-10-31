@@ -1,4 +1,4 @@
-prome-primary:
+cluster-infra:
   from:
   - default
   - default/pods
