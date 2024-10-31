@@ -9,13 +9,13 @@ terraform {
   }
 
   backend "gcs" {
-    bucket = "kcd-tfstate"
-    prefix = "project-1-kcd-vpc"
+    bucket = "kcd-2024"
+    prefix = "project-kcd-1/vpc"
   }
 }
 
 locals {
-  project = "project-1-kcd"
+  project = "project-kcd-1"
   region  = "asia-southeast2"
 }
 
