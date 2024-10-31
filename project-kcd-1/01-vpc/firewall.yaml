@@ -7,3 +7,4 @@ prome-primary:
   - default
   - default/pods
   - 10.233.36.144/28   # gke vpc peering
+  - 10.233.18.10/32    # project-kcd-2 - IP ILB prome helm 

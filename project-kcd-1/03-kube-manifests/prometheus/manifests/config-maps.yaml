@@ -20,10 +20,8 @@ data:
         params:
           'match[]':
             - '{job="node-exporter"}'
-            - '{job="kubernetes-nodes"}'
-            - '{job="kubernetes-pods"}'
-            - '{__name__=~"job:.*"}'
-
+            - '{job="kubelet"}'
         static_configs:
           - targets:
             - '34.128.115.255:8080'
+            - '10.233.18.10:9090'
