@@ -9,16 +9,17 @@ terraform {
   }
 
   backend "gcs" {
-    bucket = "kcd-tfstate"
-    prefix = "project-1-kcd-proj"
+    bucket = "kcd-2024"
+    prefix = "project-kcd-1/project"
   }
 }
 
 
 # Project
 resource "google_project" "project" {
-  name            = "project-1-kcd"
-  project_id      = "project-1-kcd"
+  name            = "project-kcd-1"
+  project_id      = "project-kcd-1"
+  billing_account = "013B4E-C45A90-87469C"
 }
 
 
