@@ -30,7 +30,7 @@ provider "google" {
 module "gkeauth" {
   source = "../../../modules/gke-auth-v2"
 
-  name     = "prome-primary"
+  name     = "cluster-infra"
   location = local.region
 }
 
