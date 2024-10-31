@@ -1,5 +1,6 @@
 ## Terraform-specific ignore patterns
 .terraform/
+*.lock.hcl
 *.tfstate
 *.tfstate.backup
 terraform.tfvars
