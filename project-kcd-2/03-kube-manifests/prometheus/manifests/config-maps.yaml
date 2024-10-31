@@ -4,7 +4,7 @@ metadata:
   name: prometheus-server-conf
   labels:
     name: prometheus-server-conf
-  namespace: monitoring
+  namespace: prometheus
 data:
   prometheus.rules: |-
     groups:
@@ -28,7 +28,7 @@ data:
       - scheme: http
         static_configs:
         - targets:
-          - "alertmanager.monitoring.svc:9093"
+          - "alertmanager.prometheus.svc:9093"
     scrape_configs:
       - job_name: 'node-exporter'
         kubernetes_sd_configs:
