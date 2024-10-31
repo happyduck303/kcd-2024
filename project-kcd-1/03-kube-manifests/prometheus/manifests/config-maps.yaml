@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-server-conf
+  labels:
+    name: prometheus-server-conf
+  namespace: monitoring
+data:
+  prometheus.yml: |-
+    global:
+      scrape_interval: 5s
+      external_labels:
+        monitor: 'gateway'
+        
+    scrape_configs:
+      - job_name: 'gateway'
+        scrape_interval: 15s
+        honor_labels: true
+        metrics_path: '/federate'
+        params:
+          'match[]':
+            - '{job="node-exporter"}'
+            - '{job="kubernetes-nodes"}'
+            - '{job="kubernetes-pods"}'
+            - '{__name__=~"job:.*"}'
+
+        static_configs:
+          - targets:
+            - '34.128.115.255:8080'
