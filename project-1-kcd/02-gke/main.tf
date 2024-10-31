@@ -13,13 +13,13 @@ terraform {
   }
 
   backend "gcs" {
-    bucket = "kcd-tfstate"
-    prefix = "project-1-kcd-gke-prome-primary"
+    bucket = "kcd-2024"
+    prefix = "project-kcd-1/gke/prome-primary"
   }
 }
 
 locals {
-  project = "project-1-kcd"
+  project = "project-kcd-1"
   region  = "asia-southeast2"
 }
 
@@ -66,21 +66,21 @@ resource "google_container_cluster" "cluster" {
     cluster_secondary_range_name  = "pods"
     services_secondary_range_name = "services"
   }
-  private_cluster_config {
-    enable_private_endpoint = true
-    enable_private_nodes    = true
-    master_ipv4_cidr_block  = "10.233.36.144/28"
-  }
+  # private_cluster_config {
+  #   enable_private_endpoint = true
+  #   enable_private_nodes    = true
+  #   master_ipv4_cidr_block  = "10.233.36.144/28"
+  # }
   default_snat_status {
     disabled = true
   }
-  master_authorized_networks_config {
-    gcp_public_cidrs_access_enabled = false
-    cidr_blocks {
-      display_name = "temporary-debug"
-      cidr_block   = "10.233.17.2/32"
-    }
-  }
+  # master_authorized_networks_config {
+  #   gcp_public_cidrs_access_enabled = false
+  #   cidr_blocks {
+  #     display_name = "temporary-debug"
+  #     cidr_block   = "10.233.17.2/32"
+  #   }
+  # }
 
 
   # gke feature
