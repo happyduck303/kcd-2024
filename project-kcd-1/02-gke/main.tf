@@ -53,8 +53,9 @@ resource "google_project_service" "container" {
 
 resource "google_container_cluster" "cluster" {
   depends_on = [google_project_service.container]
+  deletion_protection = false
 
-  name = "prome-primary"
+  name = "cluster-infra"
 
 
   # networking
@@ -122,11 +123,11 @@ resource "google_container_cluster" "cluster" {
       enabled = true
     }
   }
-  monitoring_config {
-    enable_components = ["SYSTEM_COMPONENTS"]
-    managed_prometheus { enabled = true }
-    advanced_datapath_observability_config { enable_metrics = true }
-  }
+  # monitoring_config {
+  #   enable_components = ["SYSTEM_COMPONENTS"]
+  #   managed_prometheus { enabled = true }
+  #   advanced_datapath_observability_config { enable_metrics = true }
+  # }
   logging_config {
     enable_components = ["SYSTEM_COMPONENTS", "WORKLOADS"]
   }
