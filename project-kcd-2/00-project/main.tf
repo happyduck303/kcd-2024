@@ -37,10 +37,10 @@ resource "google_project_service" "enabled_service" {
   disable_on_destroy = false
 }
 
-# ILB for prome-helm
-resource "google_compute_address" "prome-helm" {
+# ILB for prometheus-ilb
+resource "google_compute_address" "prometheus-ilb" {
   project      = google_project.project.name
-  name         = "prome-helm"
+  name         = "prometheus-ilb"
   address_type = "INTERNAL"
   subnetwork   = "default"
   region       = "asia-southeast2"
