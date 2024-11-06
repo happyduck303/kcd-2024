@@ -90,7 +90,7 @@ data:
           target_label: kubernetes_pod_name
       - job_name: 'kube-state-metrics'
         static_configs:
-          - targets: ['metrics-server.kube-system.svc.cluster.local:443']
+          - targets: ['kube-state-metrics.kube-system.svc.cluster.local:8080']
       - job_name: 'kubernetes-cadvisor'
         scheme: https
         tls_config:
