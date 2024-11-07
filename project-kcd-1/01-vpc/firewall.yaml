@@ -2,9 +2,8 @@ cluster-infra:
   from:
   - default
   - default/pods
-  - 10.233.36.144/28   # gke vpc peering
   to:
   - default
   - default/pods
-  - 10.233.36.144/28   # gke vpc peering
-  - 10.233.18.18/32    # project-kcd-2 - IP ILB prome helm 
+  - 10.233.18.18/32 # project-kcd-2 - prometheus-ilb
+  - 10.233.29.7/32  # project-kcd-3 - prometheus-ilb

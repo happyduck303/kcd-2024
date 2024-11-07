@@ -1,4 +1,4 @@
-cluster-prod-2:
+cluster-prod-3:
   from:
   - default
   - default/pods

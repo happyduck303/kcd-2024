@@ -20,8 +20,13 @@ data:
         params:
           'match[]':
             - '{job="node-exporter"}'
-            - '{job="kubelet"}'
+            - '{job="kubernetes-apiservers"}'
+            - '{job="kubernetes-nodes"}'
+            - '{job="kubernetes-pods"}'
+            - '{job="kube-state-metrics"}'
+            - '{job="kubernetes-cadvisor"}'
+            - '{job="kubernetes-service-endpoints"}'
         static_configs:
           - targets:
-            - '34.128.115.255:8080'
-            - '10.233.18.10:9090'
+            - '10.233.18.18:8080' # project-kcd-2 - prometheus-ilb
+            - '10.233.29.7:8080'  # project-kcd-3 - prometheus-ilb
