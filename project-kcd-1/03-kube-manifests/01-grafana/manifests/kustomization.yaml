@@ -6,3 +6,9 @@ resources:
 - grafana-pvc.yaml
 - grafana-deployment.yaml
 - service.yaml
+
+configMapGenerator:
+- name: grafana-config
+  files: [ grafana.ini ] 
+- name: datasources
+  files: [ provisioning/datasources/default.yaml ]
