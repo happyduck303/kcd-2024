@@ -10,3 +10,5 @@ resources:
 configMapGenerator:
 - name: grafana-config
   files: [ grafana.ini ] 
+- name: datasources
+  files: [ provisioning/datasources/default.yaml ]
