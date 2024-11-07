@@ -1,9 +1,7 @@
-cluster-prod-2:
+cluster-prod-3:
   from:
   - default
   - default/pods
-  - 10.233.39.16/28   # gke vpc peering
   to:
   - default
   - default/pods
-  - 10.233.39.16/28   # gke vpc peering
