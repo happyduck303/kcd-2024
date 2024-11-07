@@ -6,3 +6,6 @@ resources:
 - config-maps.yaml
 - prometheus-deployment.yaml
 - prometheus-service.yaml
+- service-account.yaml
+- cluster-role.yaml
+- cluster-role-binding.yaml
