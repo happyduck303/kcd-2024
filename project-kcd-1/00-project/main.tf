@@ -44,3 +44,11 @@ resource "google_compute_network_peering" "peering-to-project-kcd-2" {
   network      = "https://www.googleapis.com/compute/v1/projects/project-kcd-1/global/networks/default"
   peer_network = "https://www.googleapis.com/compute/v1/projects/project-kcd-2/global/networks/default"
 }
+
+
+# vpc peering dari project-kcd-1 (default) ke project-kcd-3 (default)
+resource "google_compute_network_peering" "peering-to-project-kcd-3" {
+  name         = "peering-to-project-kcd-3"
+  network      = "https://www.googleapis.com/compute/v1/projects/project-kcd-1/global/networks/default"
+  peer_network = "https://www.googleapis.com/compute/v1/projects/project-kcd-3/global/networks/default"
+}
