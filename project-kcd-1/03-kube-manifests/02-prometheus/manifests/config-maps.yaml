@@ -6,6 +6,9 @@ metadata:
     name: prometheus-server-conf
   namespace: prometheus-federation
 data:
+  web.yml: |-
+    basic_auth_users:
+      admin: $2b$12$hNf2lSsxfm0.i4a.1kVpSOVyBCfIB51VRjgBUyv6kdnyTlgWj81Ay
   prometheus.yml: |-
     global:
       scrape_interval: 5s
