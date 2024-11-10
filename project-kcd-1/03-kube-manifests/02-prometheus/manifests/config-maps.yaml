@@ -30,3 +30,6 @@ data:
           - targets:
             - '10.233.18.18:8080' # project-kcd-2 - prometheus-ilb
             - '10.233.29.7:8080'  # project-kcd-3 - prometheus-ilb
+        basic_auth:
+          username: 'admin'
+          password_file: '/tmp/password'

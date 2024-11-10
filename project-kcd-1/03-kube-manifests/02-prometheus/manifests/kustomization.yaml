@@ -4,5 +4,6 @@ namespace: prometheus-federation
 resources:
 - namespace.yaml
 - config-maps.yaml
+- secret.yaml
 - prometheus-deployment.yaml
 - prometheus-service.yaml
