@@ -21,6 +21,18 @@ spec:
           args:
             - "--config.file=/etc/prometheus/prometheus.yml"
             - "--storage.tsdb.path=/prometheus/"
+          command:
+          - sh
+          - -ceu
+          - |
+            echo $password_prome > /tmp/password
+            prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus
+          env:
+          - name: password_prome
+            valueFrom:
+              secretKeyRef:
+                name: prometheus-credential
+                key: password_prome
           ports:
             - containerPort: 9090
           volumeMounts:
