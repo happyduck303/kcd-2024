@@ -19,10 +19,11 @@ spec:
       containers:
         - name: prometheus
           image: prom/prometheus
-          args:
-            - "--config.file=/etc/prometheus/prometheus.yml"
-            - "--storage.tsdb.path=/prometheus/"
-            - "--web.config.file=/etc/prometheus/web.yml"
+          command:
+          - sh
+          - -ceu
+          - |
+            prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.config.file=/etc/prometheus/web.yml
           ports:
             - containerPort: 9090
           volumeMounts:
