@@ -8,6 +8,6 @@ datasources:
     basicAuth: true
     basicAuthUser: admin
     secureJsonData:
-      basicAuthPassword: 
+      basicAuthPassword: PASSWORD
 
       
