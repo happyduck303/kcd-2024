@@ -21,7 +21,24 @@ spec:
       containers:
         - name: grafana
           image: grafana/grafana:latest
-          imagePullPolicy: IfNotPresent
+          command:
+          - sh
+          - -ceu
+          - |
+            mkdir -p /var/lib/grafana/provisioning/datasources
+            cp /etc/grafana/provisioning/datasources/default.yaml /var/lib/grafana/provisioning/datasources/default.yaml
+            echo $password_prome > /tmp/password
+            passwd=$(cat /tmp/password)
+            sed -i "s/PASSWORD/$passwd/" /var/lib/grafana/provisioning/datasources/default.yaml
+            grafana server
+          env:
+          - name: GF_PATHS_PROVISIONING
+            value: "/var/lib/grafana/provisioning"
+          - name: password_prome
+            valueFrom:
+              secretKeyRef:
+                name: prometheus-credential
+                key: password_prome
           ports:
             - containerPort: 3000
               name: http-grafana
@@ -55,47 +72,6 @@ spec:
               name: grafana-config
             - mountPath: /etc/grafana/provisioning/datasources
               name: grafana-datasources
-          env:
-            # - name: GF_PATHS_CONFIG
-            #   value: "/etc/grafana/grafana.ini"
-            # - name: GF_PATHS_DATA
-            #   value: "/var/lib/grafana"
-            # - name: GF_PATHS_HOME
-            #   value: "/usr/share/grafana"
-            # - name: GF_PATHS_LOGS
-            #   value: "/var/log/grafana"
-            # - name: GF_PATHS_PLUGINS
-            #   value: "/var/lib/grafana/plugins"
-            # - name: GF_PATHS_PROVISIONING
-            #   value: "/etc/grafana/provisioning"
-            # - name: GF_SERVER_ROOT_URL
-            #   value: "https://gtp-grafana-staging.gtp-lkpp.teleport.sh"
-            # - name: GF_AUTH_DISABLE_LOGIN_FORM
-            #   value: "true"
-            # - name: GF_AUTH_BASIC_ENABLED
-            #   value: "true"
-            # - name: GF_AUTH_JWT_ENABLED
-            #   value: "true"
-            # - name: GF_AUTH_JWT_DISABLE_LOGIN_FORM
-            #   value: "true"
-            # - name: GF_AUTH_JWT_HEADER_NAME
-            #   value: "Teleport-Jwt-Assertion"
-            # - name: GF_AUTH_JWT_EMAIL_CLAIM
-            #   value: "sub"
-            # - name: GF_AUTH_JWT_USERNAME_CLAIM
-            #   value: "sub"
-            # - name: GF_AUTH_JWT_JWK_SET_URL
-            #   value: "https://gtp-lkpp.teleport.sh/.well-known/jwks.json"
-            # - name: GF_AUTH_JWT_AUTO_SIGN_UP
-            #   value: "true"
-            # # - name: GF_USERS_AUTO_ASSIGN_ORG_ROLE
-            # #   value: "Viewer"
-            # - name: GF_USERS_AUTO_ASSIGN_ORG_ID
-            #   value: "2"
-            # - name: GF_AUTH_JWT_ROLE_ATTRIBUTE_PATH
-            #   value: "contains(roles[*], 'grafana-admin') && 'Admin' || contains(roles[*], 'ekatalog-dev-log-viewer') && 'Viewer' || contains(roles[*], 'toko-daring-dev-log-viewer') && 'Viewer'"
-            # - name: GF_AUTH_JWT_GROUPS_ATTRIBUTE_PATH
-            #   value: roles[*]
       volumes:
         - name: grafana-pv
           persistentVolumeClaim:
