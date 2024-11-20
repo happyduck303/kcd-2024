@@ -1,0 +1,9 @@
+cluster-infra:
+  from:
+  - default
+  - default/pods
+  to:
+  - default
+  - default/pods
+  - 10.233.18.2/32  # kcd-project-2 - prometheus-ilb
+  - 10.233.29.7/32  # kcd-project-3 - prometheus-ilb
