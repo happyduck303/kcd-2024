@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-server-conf
+  labels:
+    name: prometheus-server-conf
+  namespace: prometheus-federation
+data:
+  web.yml: |-
+    basic_auth_users:
+      admin: $2b$12$hNf2lSsxfm0.i4a.1kVpSOVyBCfIB51VRjgBUyv6kdnyTlgWj81Ay
+  prometheus.yml: |-
+    global:
+      scrape_interval: 5s
+      external_labels:
+        monitor: 'gateway'
+        
+    scrape_configs:
+      - job_name: 'gateway'
+        scrape_interval: 15s
+        honor_labels: true
+        metrics_path: '/federate'
+        params:
+          'match[]':
+            - '{job="node-exporter"}'
+            - '{job="kubernetes-apiservers"}'
+            - '{job="kubernetes-nodes"}'
+            - '{job="kubernetes-pods"}'
+            - '{job="kube-state-metrics"}'
+            - '{job="kubernetes-cadvisor"}'
+            - '{job="kubernetes-service-endpoints"}'
+        static_configs:
+          - targets:
+            - '10.233.18.2:8080'  # kcd-project-2 - prometheus-ilb
+            - '10.233.29.7:8080'  # kcd-project-3 - prometheus-ilb
+        basic_auth:
+          username: 'admin'
+          password_file: '/tmp/password'
