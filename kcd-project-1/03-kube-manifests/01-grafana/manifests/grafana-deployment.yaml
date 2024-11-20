@@ -34,10 +34,22 @@ spec:
           env:
           - name: GF_PATHS_PROVISIONING
             value: "/var/lib/grafana/provisioning"
+          - name: GF_SECURITY_DISABLE_INITIAL_ADMIN_CREATION
+            value: "false"
+          - name: GF_SECURITY_ADMIN_EMAIL
+            value: "potter@localhost"
+          - name: GF_SECURITY_ADMIN_USER
+            value: "potter"
+          - name: GF_SECURITY_ADMIN_PASSWORD
+            value: "potter"
+            # valueFrom:
+            #   secretKeyRef:
+            #     name: secret
+            #     key: password_grafana
           - name: password_prome
             valueFrom:
               secretKeyRef:
-                name: prometheus-credential
+                name: secret
                 key: password_prome
           ports:
             - containerPort: 3000
