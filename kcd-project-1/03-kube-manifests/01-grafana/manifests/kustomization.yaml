@@ -18,8 +18,10 @@ configMapGenerator:
 - name: dashboards-pods-cluster-2
   files:
     - provisioning/dashboards/cluster-2/pod.json
-    - provisioning/dashboards/cluster-2/nodes.json
 - name: dashboards-pods-cluster-3
   files:
     - provisioning/dashboards/cluster-3/pod.json
-    - provisioning/dashboards/cluster-3/nodes.json
+- name: dashboards-infra
+  files:
+    - provisioning/dashboards/infra/nodes.json
+  
