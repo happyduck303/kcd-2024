@@ -76,6 +76,8 @@ spec:
               name: grafana-dashboards-pods-cluster-2
             - mountPath: /etc/grafana/provisioning/dashboards/cluster-3
               name: grafana-dashboards-pods-cluster-3
+            - mountPath: /etc/grafana/provisioning/dashboards/infra
+              name: grafana-dashboards-infra
       volumes:
         - name: grafana-pv
           persistentVolumeClaim:
@@ -92,3 +94,6 @@ spec:
         - name: grafana-dashboards-pods-cluster-3
           configMap:
             name: dashboards-pods-cluster-3
+        - name: grafana-dashboards-infra
+          configMap:
+            name: dashboards-infra
