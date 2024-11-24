@@ -13,3 +13,7 @@ configMapGenerator:
   files: [ grafana.ini ] 
 - name: datasources
   files: [ provisioning/datasources/default.yaml ]
+- name: dashboards
+  files: [ provisioning/dashboards/default.yaml ]
+- name: dashboards-pods
+  files: [ provisioning/dashboards/pod.json ]

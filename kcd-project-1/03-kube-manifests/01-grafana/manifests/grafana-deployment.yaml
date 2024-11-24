@@ -84,6 +84,11 @@ spec:
               name: grafana-config
             - mountPath: /etc/grafana/provisioning/datasources
               name: grafana-datasources
+            - mountPath: /var/lib/grafana/provisioning/dashboards
+              name: grafana-dashboards
+            - mountPath: /etc/grafana/provisioning/dashboards
+              name: grafana-dashboards-pods
+            
       volumes:
         - name: grafana-pv
           persistentVolumeClaim:
@@ -94,3 +99,9 @@ spec:
         - name: grafana-datasources
           configMap:
             name: datasources
+        - name: grafana-dashboards
+          configMap:
+            name: dashboards
+        - name: grafana-dashboards-pods
+          configMap:
+            name: dashboards-pods
