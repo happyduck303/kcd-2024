@@ -34,18 +34,6 @@ spec:
           env:
           - name: GF_PATHS_PROVISIONING
             value: "/var/lib/grafana/provisioning"
-          - name: GF_SECURITY_DISABLE_INITIAL_ADMIN_CREATION
-            value: "false"
-          - name: GF_SECURITY_ADMIN_EMAIL
-            value: "potter@localhost"
-          - name: GF_SECURITY_ADMIN_USER
-            value: "potter"
-          - name: GF_SECURITY_ADMIN_PASSWORD
-            value: "potter"
-            # valueFrom:
-            #   secretKeyRef:
-            #     name: secret
-            #     key: password_grafana
           - name: password_prome
             valueFrom:
               secretKeyRef:
@@ -80,17 +68,27 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/grafana
               name: grafana-pv
-            - mountPath: /etc/grafana
-              name: grafana-config
             - mountPath: /etc/grafana/provisioning/datasources
               name: grafana-datasources
+            - mountPath: /var/lib/grafana/provisioning/dashboards
+              name: grafana-dashboards
+            - mountPath: /etc/grafana/provisioning/dashboards/cluster-2
+              name: grafana-dashboards-pods-cluster-2
+            - mountPath: /etc/grafana/provisioning/dashboards/cluster-3
+              name: grafana-dashboards-pods-cluster-3
       volumes:
         - name: grafana-pv
           persistentVolumeClaim:
             claimName: grafana-pvc
-        - name: grafana-config
-          configMap:
-            name: grafana-config
         - name: grafana-datasources
           configMap:
-            name: datasources
+            name: datasources                     
+        - name: grafana-dashboards
+          configMap:
+            name: dashboards
+        - name: grafana-dashboards-pods-cluster-2
+          configMap:
+            name: dashboards-pods-cluster-2
+        - name: grafana-dashboards-pods-cluster-3
+          configMap:
+            name: dashboards-pods-cluster-3
