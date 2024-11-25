@@ -11,16 +11,18 @@ resources:
 configMapGenerator:
 - name: datasources
   files: [ provisioning/datasources/default.yaml ]
+
 - name: dashboards
   files: [ provisioning/dashboards/default.yaml ]
-# - name: dashboards-pods
-#   files: [ provisioning/dashboards/pod.json ]
+
 - name: dashboards-pods-cluster-2
   files:
     - provisioning/dashboards/cluster-2/pod.json
+
 - name: dashboards-pods-cluster-3
   files:
     - provisioning/dashboards/cluster-3/pod.json
+    
 - name: dashboards-infra
   files:
     - provisioning/dashboards/infra/nodes.json
